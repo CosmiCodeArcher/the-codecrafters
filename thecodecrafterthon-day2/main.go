@@ -17,6 +17,7 @@ func main() {
 	fmt.Println("Welcome to the base converter. Example Usage: convert 1E hex")
 	for isOver != true {
 		fmt.Scan(&arg, &num, &op)
+		if (op == "hex" && strings.ContainsAny(strings.ToUpper(num), "GHIJKLMNOPQRSTUVWXYZ") || (op == "bin" && strings.ContainsAny(num, "23456789")) || (op == "dec" && strings.ContainsAny(strings.ToUpper(num), "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) || (op != "hex" && op != "bin" && op != "dec")) {fmt.Println("Invalid Input."); continue}
 		fmt.Println(" ")
 
 		if op == "hex" {fmt.Print("Decimal:"); fmt.Print(" ") ;fmt.Println(hex(num)); fmt.Println(" ")}
