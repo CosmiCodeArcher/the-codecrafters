@@ -6,11 +6,13 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"bufio"
+	"fmt"
 	"os"
+	"strings"
+	// "unicode"
 )
+
 // Your program accepts a command followed by a string and applies the correct transformation.
 
 func main() {
@@ -21,19 +23,83 @@ func main() {
 	line = strings.TrimSpace(line)
 
 	parts := strings.Fields(line)
+	
 
-	command := parts [0]
+	command := parts[0]
 	textSlice := parts[1:]
 	text := strings.Join(textSlice, " ")
 
 	if command == "upper" {fmt.Println(upper(text))}
+	if command == "lower" {fmt.Println(lower(text))}
+	if command == "cap" {fmt.Println(cap(text))}
+	if command == "title" {fmt.Println(title(text))}
+	// if command == "snake" {fmt.Println(snake(text))}
+	// if command == "reverse" {fmt.Println(reverse(text))}
 }
 
 func upper(s string) string {
 	return strings.ToUpper(s)
 }
-// func lower(s string) string {}
-// func cap(s string) string {}
-// func title(s string) string {}
-// func snake(s string) string {}
-// func reverse(s string) string {}
+
+func lower(s string) string {
+	return strings.ToLower(s)
+}
+
+func cap(s string) string {
+	words := strings.Fields(s)
+
+	for i, word := range words {
+		words[i] = strings.ToUpper(string(word[0])) + strings.ToLower(string(word[1:]))
+	}
+	return strings.Join(words, " ")
+}
+
+func title(s string) string {
+	words := strings.Fields(s)
+	connectors := []string{"a", "an", "the", "and", "but", "or", "for", "nor", "on", "at", "to", "by", "in", "of", "up", "as", "is", "it"}
+
+	for i, word := range words {
+		for _, c := range connectors {
+			if word == c && word != string(word[0]) {
+				words[i] = word
+			} else {
+				words[i] = strings.ToUpper(string(word[0])) + strings.ToLower(string(word[1:]))
+			}
+		}
+	}
+
+	return strings.Join(words, " ")
+}
+
+// func snake(s string) string {
+// 	words := strings.Fields(s)
+// 	newSlice := []string{}
+// 	newString := ""
+
+// 	for i, word := range words {
+// 		for _, v := range word {
+// 			if unicode.IsPunct(v) {
+// 				continue
+// 			} else {
+// 				newSlice = append(newSlice, string(v))
+// 			}
+// 			newString = strings.Join(newSlice, "")
+// 			words[i] = newString
+// 		}
+// 	}
+	
+// 	camelCase := strings.Join(words, "_")
+
+// 	return strings.TrimSpace(strings.ToLower(camelCase))
+// }
+
+// func reverse(s string) string {
+// 	reverse := []string{}
+
+// 	for i := len(s) - 1; i >= 0; i-- {
+// 		reverse = append(reverse, string(s[i]))
+// 	}
+
+// 	// return strings.Join(words, " ")
+// 	return strings.Join(reverse, "")
+// }
