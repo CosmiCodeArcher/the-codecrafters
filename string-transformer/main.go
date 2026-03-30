@@ -34,7 +34,7 @@ func main() {
 	if command == "cap" {fmt.Println(cap(text))}
 	if command == "title" {fmt.Println(title(text))}
 	if command == "snake" {fmt.Println(snake(text))}
-	// if command == "reverse" {fmt.Println(reverse(text))}
+	if command == "reverse" {fmt.Println(reverse(text))}
 }
 
 func upper(s string) string {
@@ -101,10 +101,10 @@ func reverse(s string) string {
 
 	for i, word := range words {
 		reverse := []string{}
-		for j = len(word)-1; i >=0; j++{
-			reverse = append(reverse, word[j])
-			words[i] = 
+		for j := len(word)-1; j >= 0; j--{
+			reverse = append(reverse, string(word[j])) 
 		}
-		
+		words[i] = strings.Join(reverse, "")
 	}
+	return strings.Join(words, " ")
 }
