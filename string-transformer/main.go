@@ -9,6 +9,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 	"unicode"
 )
@@ -17,23 +18,23 @@ import (
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	
 	fmt.Println("Type your command and a string")
-	line, _ :=  reader.ReadString('\n')
+
+	line, _ := reader.ReadString('\n')
 	line = strings.TrimSpace(line)
-
 	parts := strings.Fields(line)
-	
 
-	command := parts[0]
+	command := strings.ToLower(parts[0])
 	textSlice := parts[1:]
 	text := strings.Join(textSlice, " ")
+	if text == "" {fmt.Print("No text provided. Usage: ", command, " <text>")}
 
-	validCommands := []string{"upper", "lower", "cap", "title", "snake", "reverse"}
-
-	for i, r := range validCommands{
-		if command != validCommands[i] {i++}
-		if r == validCommands[len(validCommands)-1] {fmt.Println("✗ Unknown command:", command); fmt.Println(" Valid commands: upper, lower, cap, title, snake, reverse, exit")}
+	validCommands := []string{"upper", "lower", "cap", "title", "snake", "reverse", "exit"}
+	found := false
+	if slices.Contains(validCommands, command) {found = true}
+	if !found && command != "exit" {
+		fmt.Println("✗ Unknown command:", command)
+		fmt.Println("Valid commands:", strings.Join(validCommands, ", "))
 	}
 
 	if command == "upper" {fmt.Println(upper(text))}
@@ -44,13 +45,9 @@ func main() {
 	if command == "reverse" {fmt.Println(reverse(text))}
 }
 
-func upper(s string) string {
-	return strings.ToUpper(s)
-}
+func upper(s string) string {return strings.ToUpper(s)}
 
-func lower(s string) string {
-	return strings.ToLower(s)
-}
+func lower(s string) string {return strings.ToLower(s)}
 
 func cap(s string) string {
 	words := strings.Fields(s)
@@ -60,9 +57,6 @@ func cap(s string) string {
 	}
 	return strings.Join(words, " ")
 }
-
-// [Threat, Level, of, Elevated,]
-
 
 func title(s string) string {
 	words := strings.Fields(s)
@@ -97,7 +91,7 @@ func snake(s string) string {
 			words[i] = newString
 		}
 	}
-	
+
 	camelCase := strings.Join(words, "_")
 
 	return strings.TrimSpace(strings.ToLower(camelCase))
@@ -108,8 +102,8 @@ func reverse(s string) string {
 
 	for i, word := range words {
 		reverse := []string{}
-		for j := len(word)-1; j >= 0; j--{
-			reverse = append(reverse, string(word[j])) 
+		for j := len(word) - 1; j >= 0; j-- {
+			reverse = append(reverse, string(word[j]))
 		}
 		words[i] = strings.Join(reverse, "")
 	}
