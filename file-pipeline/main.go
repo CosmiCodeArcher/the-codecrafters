@@ -46,28 +46,28 @@ import (
 
 func main() {
 	input, _ := os.ReadFile("input.txt")
-	lines := strings.Split(string(input), "\n")
-	for i := range lines {
-		lines[i] = pipe(lines[i])
+	rawLines := strings.Split(string(input), "\n")
+	outputLines := []string{}
+
+	for _, line := range rawLines {
+		transformed := pipe(line)
+		if transformed != "" {
+			outputLines = append(outputLines, transformed)
+		}
 	}
-	os.WriteFile("output.txt", []byte(strings.Join(lines, "\n")), 0644)
+
+	os.WriteFile("output.txt", []byte(strings.Join(outputLines, "\n")), 0644)
 }
 
 func pipe(s string) string {
-	result := []string{}
-	if s == strings.ToUpper(s) {
-		s = cap(s)
-	}
-	if s == strings.ToLower(s) {
-		s = strings.ToUpper(s)
-	}
-	if strings.Contains(s, "REVERSE") {
-		s = reverse(s)
-	}
+	if s == strings.ToUpper(s) {s = cap(s)}
+	if s == strings.ToLower(s) {s = strings.ToUpper(s)}
+	if strings.Contains(s, "REVERSE") {s = reverse(s)}
+
 	s = strings.TrimSpace(s)
 
-	if strings.Trim(s, "-") != "" && strings.Trim(s, " ") != "" {
-		result = append(result, s)
+	if strings.Trim(s, " -") == "" {
+		return ""
 	}
 
 	return s
