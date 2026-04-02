@@ -51,8 +51,19 @@ func main() {
 		return
 	}
 
-	input, _ := os.ReadFile(os.Args[1])
+	inputFile := os.Args[1]
 	output := os.Args[2]
+
+	input, _ := os.ReadFile(inputFile)
+	if input == nil {fmt.Println("File not found: input.txt"); return}
+
+	if inputFile == output {fmt.Println("Input and output cannot be the same file"); return}
+	dirOutput, err := os.Stat(output)
+	if err == nil && dirOutput.IsDir() {
+		fmt.Println("Output cannot be a directory");
+		return
+	}
+
 
 	rawLines := strings.Split(string(input), "\n")
 	outputLines := []string{}
@@ -68,6 +79,17 @@ func main() {
 
 	summary := fmt.Sprintf("\n==================== \nLines read: %d\nLines written: %d\nLines removed: %d\nRules applied : [\n1. Convert ALL CAPS lines to Title Case, \n2. Convert all lowercase lines to uppercase, \n3. Trim all leading and trailing whitespace, \n4. Reverse the words in any line that contains the word REVERSE, \n5. Remove lines that are only dashes or blanks\n]", len(rawLines), len(outputLines), len(rawLines)-len(outputLines))
 	outputLines = append(outputLines, summary)
+
+	if len(input) == 0 {
+		summary = fmt.Sprintf("\n==================== \nLines read: %d\nLines written: %d\nLines removed: %d\n", 0, 0, 0)
+		outputLines := []string{}
+		outputLines = append(outputLines, header)
+		outputLines = append(outputLines, summary)
+		os.WriteFile(output, []byte(strings.Join(outputLines, "\n")), 0644)
+		println(summary)
+		println( "⚠ Input file is empty. Nothing to process.")
+		return
+	}
 
 	os.WriteFile(output, []byte(strings.Join(outputLines, "\n")), 0644)
 	print(summary)
